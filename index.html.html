@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>골든래빗 · GOLDEN RABBIT</title>
+<style>
+  :root{
+    --night:#141829; --night2:#0e1120; --panel:#1b2034;
+    --gold:#e3b23c; --gold-soft:#f2d68a; --ink:#13162a;
+    --text:#ecebf4; --muted:#9aa0c0; --line:#2a3050; --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    background:var(--night);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .serif{font-family:Georgia,"Nanum Myeongjo","Apple SD Gothic Neo",serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(20,24,41,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px}
+  .brand small{display:block;font-size:9px;letter-spacing:.34em;color:var(--muted);font-weight:600}
+  .navlinks{display:flex;gap:6px}
+  .navlinks button{font:inherit;color:var(--muted);background:none;border:0;cursor:pointer;
+    padding:9px 15px;border-radius:10px;font-size:14.5px;font-weight:600;transition:.18s}
+  .navlinks button:hover{color:var(--text)}
+  .navlinks button.active{color:var(--ink);background:var(--gold)}
+  .menutoggle{display:none;background:none;border:0;color:var(--text);font-size:24px;cursor:pointer}
+
+  .page{display:none;animation:fade .5s ease}
+  .page.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .hero{position:relative;overflow:hidden;text-align:center;
+    background:radial-gradient(120% 90% at 50% -10%,#222a4a 0%,var(--night) 55%)}
+  .stars{position:absolute;inset:0;pointer-events:none;opacity:.55}
+  .hero-inner{position:relative;padding:78px 22px 90px}
+  .moonwrap{width:160px;height:160px;margin:0 auto 30px;filter:drop-shadow(0 0 40px rgba(227,178,60,.35))}
+  .eyebrow{letter-spacing:.42em;font-size:11px;color:var(--gold);font-weight:700;margin-bottom:18px}
+  h1.title{font-size:clamp(38px,7vw,68px);line-height:1.08;font-weight:800}
+  h1.title .em{color:var(--gold)}
+  .lede{max-width:560px;margin:22px auto 34px;color:#cfd2e6;font-size:clamp(15px,2.4vw,18px)}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{font:inherit;font-weight:700;font-size:15px;padding:13px 26px;border-radius:999px;
+    cursor:pointer;border:1px solid transparent;transition:.18s;display:inline-block;text-align:center}
+  .btn-gold{background:var(--gold);color:var(--ink)}
+  .btn-gold:hover{background:var(--gold-soft)}
+  .btn-ghost{background:transparent;color:var(--text);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--gold)}
+  .marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:var(--night2);padding:16px 0;margin-top:20px}
+  .marquee .wrap{display:flex;gap:34px;flex-wrap:wrap;justify-content:center;color:var(--muted);font-size:13px}
+  .marquee b{color:var(--gold-soft);font-weight:700}
+
+  section.block{padding:72px 0}
+  .kicker{display:inline-block;font-size:11px;letter-spacing:.3em;color:var(--gold);font-weight:700;margin-bottom:14px}
+  h2.head{font-size:clamp(26px,4vw,38px);font-weight:800;margin-bottom:14px}
+  .sub{color:var(--muted);max-width:620px;font-size:16px}
+
+  .story{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;margin-top:14px}
+  .story p{color:#d6d8ea;margin-bottom:16px}
+  .quote{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);
+    border-radius:var(--r);padding:26px 28px}
+  .quote .q{font-size:20px;line-height:1.5}
+  .quote .by{margin-top:14px;color:var(--muted);font-size:13px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:46px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:24px;text-align:center}
+  .stat .n{font-size:34px;font-weight:800;color:var(--gold)}
+  .stat .l{color:var(--muted);font-size:13px;margin-top:4px}
+  .values{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
+  .value{background:linear-gradient(180deg,#1d2238,#181c2e);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+  .value .ic{font-size:26px;margin-bottom:12px}
+  .value h3{font-size:17px;margin-bottom:8px}
+  .value p{color:var(--muted);font-size:14px}
+
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 30px}
+  .filters button{font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;padding:8px 16px;
+    border-radius:999px;background:var(--panel);color:var(--muted);border:1px solid var(--line);transition:.16s}
+  .filters button:hover{color:var(--text)}
+  .filters button.active{background:var(--gold);color:var(--ink);border-color:transparent}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:22px}
+  .book{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+    transition:.2s;display:flex;flex-direction:column;cursor:pointer;text-align:left}
+  .book:hover,.book:focus-visible{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 16px 36px rgba(0,0,0,.45)}
+  .cover{aspect-ratio:3/4;position:relative;background:#0e1120;overflow:hidden}
+  .cover img{width:100%;height:100%;object-fit:cover;display:block}
+  .cover .fallback{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+    padding:16px;background:linear-gradient(150deg,var(--gold),#c98f2e);color:var(--ink);font-weight:800;font-size:17px}
+  .meta{padding:14px 15px 16px}
+  .meta .mt{font-weight:700;font-size:14.5px;margin-bottom:3px;line-height:1.35;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta .ma{color:var(--muted);font-size:12.5px;margin-bottom:8px}
+  .meta .mp{color:var(--gold-soft);font-weight:700;font-size:14px}
+  .note{margin-top:18px;color:#6f769b;font-size:11.5px}
+
+  /* modal */
+  .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:18px;
+    background:rgba(7,10,20,.74);backdrop-filter:blur(3px)}
+  .modal.show{display:flex;animation:fade .25s ease}
+  .modalbox{position:relative;width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--panel);
+    border:1px solid var(--line);border-radius:20px;padding:26px}
+  .close{position:absolute;top:14px;right:14px;background:var(--night2);border:1px solid var(--line);
+    color:var(--text);width:34px;height:34px;border-radius:9px;cursor:pointer;font-size:15px}
+  .mhead{display:flex;gap:18px;margin-bottom:18px}
+  .mhead img{width:120px;aspect-ratio:3/4;object-fit:cover;border-radius:10px;flex:none;background:#0e1120}
+  .tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--ink);
+    background:var(--gold);padding:4px 9px;border-radius:6px;margin-bottom:9px}
+  #mTitle{font-size:19px;line-height:1.32;margin-bottom:8px}
+  .mauth{color:var(--muted);font-size:13px;margin-bottom:6px}
+  .mprice{color:var(--gold-soft);font-weight:800;font-size:18px}
+  .mdesc{color:#d2d5e8;font-size:14.5px;line-height:1.6;margin-bottom:20px}
+  #mBuy{width:100%}
+  .mnote{text-align:center;color:var(--muted);font-size:11.5px;margin-top:10px}
+
+  footer{border-top:1px solid var(--line);background:var(--night2);padding:40px 0;margin-top:20px}
+  .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .foot .muted{color:var(--muted);font-size:13px}
+
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+  @media (max-width:760px){
+    .menutoggle{display:block}
+    .navlinks{position:absolute;top:66px;left:0;right:0;flex-direction:column;gap:0;background:var(--night2);
+      border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .25s}
+    .navlinks.open{max-height:240px}
+    .navlinks button{border-radius:0;padding:15px 22px;text-align:left;border-bottom:1px solid var(--line)}
+    .story{grid-template-columns:1fr}
+    .stats,.values{grid-template-columns:1fr}
+    .mhead{flex-direction:column}
+    .mhead img{width:100px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <radialGradient id="moon" cx="38%" cy="34%" r="75%">
+    <stop offset="0%" stop-color="#fbe9b6"/><stop offset="55%" stop-color="#e9c25a"/><stop offset="100%" stop-color="#c9952a"/>
+  </radialGradient>
+  <symbol id="rabbitmoon" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="46" fill="url(#moon)"/>
+    <circle cx="34" cy="40" r="7" fill="#d8a93f" opacity=".5"/><circle cx="64" cy="62" r="5" fill="#d8a93f" opacity=".5"/>
+    <g fill="#1d2236">
+      <ellipse cx="52" cy="64" rx="15" ry="11"/><circle cx="40" cy="55" r="8.5"/>
+      <path d="M35 50c-3-9-2-17 1-17s4 8 2 16z"/><path d="M44 49c-1-9 1-16 4-15s2 8-1 15z"/>
+      <circle cx="37" cy="54" r="1.4" fill="#f6f1e4"/>
+    </g>
+  </symbol>
+</defs></svg>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="#" data-go="home">
+      <svg width="34" height="34"><use href="#rabbitmoon"/></svg>
+      <span>골든래빗<small>GOLDEN RABBIT</small></span>
+    </a>
+    <button class="menutoggle" id="mtoggle" aria-label="메뉴">☰</button>
+    <div class="navlinks" id="navlinks">
+      <button data-go="home" class="active">홈</button>
+      <button data-go="about">출판사 소개</button>
+      <button data-go="books">도서</button>
+    </div>
+  </nav>
+</header>
+
+<main id="home" class="page active">
+  <div class="hero">
+    <canvas class="stars" id="stars"></canvas>
+    <div class="hero-inner">
+      <div class="moonwrap"><svg viewBox="0 0 100 100" width="160" height="160"><use href="#rabbitmoon"/></svg></div>
+      <div class="eyebrow">달빛 아래, 깊이 있는 지식</div>
+      <h1 class="title serif">밤을 밝히는<br><span class="em">골든래빗</span>의 책</h1>
+      <p class="lede">달 속 토끼처럼 묵묵히, 한 권 한 권 정성껏 빚는 IT·실용 전문 출판사. 입문자의 첫걸음부터 실무자의 깊은 고민까지 함께합니다.</p>
+      <div class="cta">
+        <button class="btn btn-gold" data-go="books">도서 둘러보기</button>
+        <button class="btn btn-ghost" data-go="about">출판사 이야기</button>
+      </div>
+    </div>
+    <div class="marquee"><div class="wrap">
+      <span><b>설립</b> 2021</span><span><b>분야</b> AI · 개발 · 데이터</span>
+      <span><b>출간</b> 100여 종</span><span><b>철학</b> 쉽지만 깊게</span>
+    </div></div>
+  </div>
+  <section class="block"><div class="wrap">
+    <span class="kicker">WHY GOLDEN RABBIT</span><h2 class="head">왜 골든래빗일까요</h2>
+    <div class="values">
+      <div class="value"><div class="ic">🌙</div><h3>끝까지 읽히는 책</h3><p>어려운 개념도 끝까지 따라올 수 있도록, 흐름과 예제를 집요하게 다듬습니다.</p></div>
+      <div class="value"><div class="ic">🐇</div><h3>현장의 언어로</h3><p>실무에서 바로 쓰는 표현과 사례로, 책을 덮는 순간 적용할 수 있게 씁니다.</p></div>
+      <div class="value"><div class="ic">✨</div><h3>오래 곁에 두는 책</h3><p>한 번 보고 마는 책이 아니라, 책장에 꽂아두고 다시 펴보는 책을 지향합니다.</p></div>
+    </div>
+  </div></section>
+</main>
+
+<main id="about" class="page">
+  <section class="block"><div class="wrap">
+    <span class="kicker">ABOUT US</span><h2 class="head">출판사 소개</h2>
+    <p class="sub">골든래빗은 ‘쉽지만 깊게’라는 한 문장을 지키기 위해 만들어진 IT·실용 전문 출판사입니다.</p>
+    <div class="story">
+      <div>
+        <p>처음 코드를 배우던 날의 막막함을 기억합니다. 골든래빗은 그 막막함을 줄이는 일에서 출발했습니다. 입문자가 첫 페이지에서 길을 잃지 않도록, 실무자가 마지막 페이지에서 새 관점을 얻도록 책을 설계합니다.</p>
+        <p>저자와 편집자가 한 문장씩 함께 다듬으며, 화면 앞에서 멈추지 않고 끝까지 읽히는 책을 만듭니다. 달 속에서 묵묵히 절구를 찧는 토끼처럼, 눈에 띄지 않는 정성을 책 곳곳에 담습니다.</p>
+      </div>
+      <div class="quote">
+        <div class="q serif">“좋은 기술서는 답을 주는 책이 아니라, 스스로 답을 찾게 하는 책입니다.”</div>
+        <div class="by">— 골든래빗 편집부</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n">2021</div><div class="l">설립 연도</div></div>
+      <div class="stat"><div class="n">100+</div><div class="l">누적 출간 도서</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">핵심 출판 분야</div></div>
+    </div>
+    <div class="values">
+      <div class="value"><div class="ic">🤖</div><h3>AI 활용</h3><p>챗GPT·클로드·제미나이 등 생성형 AI 실무 활용서.</p></div>
+      <div class="value"><div class="ic">💻</div><h3>바이브 코딩·개발</h3><p>클로드 코드·코덱스·백엔드 등 AI 시대의 개발.</p></div>
+      <div class="value"><div class="ic">📜</div><h3>자격증·교양</h3><p>SQLD·ADsP 수험서와 IT 교양·비즈니스 도서.</p></div>
+    </div>
+  </div></section>
+</main>
+
+<main id="books" class="page">
+  <section class="block"><div class="wrap">
+    <span class="kicker">OUR BOOKS</span><h2 class="head">도서 소개</h2>
+    <p class="sub">골든래빗이 펴낸 책들을 분야별로 만나보세요. 표지를 누르면 상세 정보와 구매 링크가 열립니다.</p>
+    <div class="filters" id="filters">
+      <button data-cat="all" class="active">전체</button>
+      <button data-cat="AI 활용">AI 활용</button>
+      <button data-cat="바이브 코딩">바이브 코딩</button>
+      <button data-cat="개발·백엔드">개발·백엔드</button>
+      <button data-cat="자격증">자격증</button>
+      <button data-cat="비즈니스·교양">비즈니스·교양</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="note">※ 도서 정보·표지 이미지·가격 출처: 네이버 도서. 가격은 변동될 수 있으며, 구매 버튼은 네이버 도서 페이지로 연결됩니다.</p>
+  </div></section>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modalbox">
+    <button class="close" id="mClose" aria-label="닫기">✕</button>
+    <div class="mhead">
+      <img id="mImg" alt="">
+      <div>
+        <span class="tag" id="mCat"></span>
+        <h3 id="mTitle"></h3>
+        <div class="mauth" id="mAuth"></div>
+        <div class="mprice" id="mPrice"></div>
+      </div>
+    </div>
+    <p class="mdesc" id="mDesc"></p>
+    <a class="btn btn-gold" id="mBuy" target="_blank" rel="noopener">구매하러 가기 →</a>
+    <p class="mnote">네이버 도서 페이지로 이동합니다</p>
+  </div>
+</div>
+
+<footer><div class="wrap foot">
+  <div class="brand"><svg width="30" height="30"><use href="#rabbitmoon"/></svg><span>골든래빗<small>GOLDEN RABBIT</small></span></div>
+  <div class="muted">© 2025 Golden Rabbit · 달빛 아래, 깊이 있는 지식</div>
+</div></footer>
+
+<script>
+const BOOKS=[
+ {t:"생존을 위한 최소한의 AI 교양",a:"조남호",cat:"AI 활용",p:22500,
+  img:"https://shopping-phinf.pstatic.net/main_6022836/60228365432.20260529154526.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/60228365432",
+  d:"챗GPT의 원리부터 AI가 혼자 일하는 미래까지. 기본을 모른 채 남들만 따라 했던 당신이 가장 먼저 읽어야 할 AI 교양서."},
+ {t:"바로바로 클로드 with 코워크·스킬·클로드 코드·디자인",a:"차진우",cat:"AI 활용",p:25200,
+  img:"https://shopping-phinf.pstatic.net/main_5994228/59942284835.20260506154216.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/59942284835",
+  d:"코워크·스킬·클로드 코드·디자인까지, 클로드의 모든 것을 한 권에. 82가지 활용법으로 10배 빨라지는 업무."},
+ {t:"이게 되네? 제미나이 완전 미친 활용법 81제",a:"오힘찬",cat:"AI 활용",p:21600,
+  img:"https://shopping-phinf.pstatic.net/main_5876676/58766768199.20260331105109.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/58766768199",
+  d:"노트북LM·오팔·Veo·Flow까지, 실무에서 진짜 쓰는 Gemini 최강 활용법 81가지."},
+ {t:"세컨드 브레인은 옵시디언 with 클로드 코드",a:"시안",cat:"AI 활용",p:22500,
+  img:"https://shopping-phinf.pstatic.net/main_5945819/59458199870.20260331123221.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/59458199870",
+  d:"마크다운·PARA·제텔카스텐에 클로드 코드를 더한 지식 관리의 정석. 나만의 두 번째 뇌를 만든다."},
+ {t:"요즘 바이브 코딩 하네스 with 클로드 코드",a:"조성진",cat:"바이브 코딩",p:27000,
+  img:"https://shopping-phinf.pstatic.net/main_6026257/60262572666.20260601155124.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/60262572666",
+  d:"프롬프트가 아니라 환경을 설계한다. 고품질 결과가 나올 수밖에 없는 클로드 코드 하네스 엔지니어링."},
+ {t:"코덱스 완벽 가이드",a:"윤재원(단테)",cat:"바이브 코딩",p:25200,
+  img:"https://shopping-phinf.pstatic.net/main_5860093/58600931892.20260331115548.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/58600931892",
+  d:"AGENTS.md부터 Spec Kit·MCP·스킬까지, 진짜 개발자의 코덱스 활용법을 담은 가장 완벽한 가이드."},
+ {t:"요즘 바이브 코딩 클로드 코드 완벽 가이드",a:"최지호(코드팩토리)",cat:"바이브 코딩",p:21600,
+  img:"https://shopping-phinf.pstatic.net/main_5635612/56356122391.20260331121232.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/56356122391",
+  d:"요금제·CLAUDE.md·모델 선택부터 MCP·서브에이전트까지, 천상계 바이브 코더의 실전 노하우."},
+ {t:"스프링 부트 4 개발자 되기 + AI: 자바 편",a:"신선영",cat:"개발·백엔드",p:30600,
+  img:"https://shopping-phinf.pstatic.net/main_5939859/59398595462.20260331101130.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/59398595462",
+  d:"JPA·OAuth2·JWT·AWS·스프링 AI로 배우는 자바 백엔드 입문 풀패키지. 누적 1만 부 베스트셀러의 귀환."},
+ {t:"n8n 업무 자동화 일잘러 되기",a:"메이허·에디 유",cat:"개발·백엔드",p:32400,
+  img:"https://shopping-phinf.pstatic.net/main_5906546/59065460639.20260331103510.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/59065460639",
+  d:"노드 몇 개로 업무 효율 1000%. 웹 스크래핑·GPT API·RAG 챗봇까지 바로 쓰는 10가지 자동화 워크플로."},
+ {t:"2026 빠르게 따는 SQLD SQL 개발자",a:"이유성·조영훈·임한울",cat:"자격증",p:21600,
+  img:"https://shopping-phinf.pstatic.net/main_5857180/58571809106.20260331113836.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/58571809106",
+  d:"비전공자도, 노베이스도 빠르게 따는 SQL 개발자 자격증. 책+특강+CBT+카페까지 합격 토탈 패키지."},
+ {t:"검색은 끝났다 AEO·GEO 마케팅",a:"주민건 외",cat:"비즈니스·교양",p:21600,
+  img:"https://shopping-phinf.pstatic.net/main_6040687/60406870852.20260612071232.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/60406870852",
+  d:"검색창의 시대는 끝났다. 광고비 0원으로 AI를 당신의 24시간 영업사원으로 부리는 법."},
+ {t:"AI 국부론",a:"이승현",cat:"비즈니스·교양",p:25200,
+  img:"https://shopping-phinf.pstatic.net/main_5915550/59155508674.20260331123024.jpg",
+  link:"https://search.shopping.naver.com/book/catalog/59155508674",
+  d:"노동의 종말과 인구 절벽을 맞이한 대한민국을 G3로 이끌 인공지능 레버리지 전략. 21세기판 국부론."},
+];
+
+const grid=document.getElementById('grid');
+function render(cat){
+  grid.innerHTML='';
+  BOOKS.filter(b=>cat==='all'||b.cat===cat).forEach((b,i)=>{
+    const el=document.createElement('div');
+    el.className='book';el.tabIndex=0;el.setAttribute('role','button');
+    el.innerHTML=`
+      <div class="cover">
+        <img src="${b.img}" alt="${b.t} 표지" loading="lazy"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="fallback">${b.t}</div>
+      </div>
+      <div class="meta">
+        <div class="mt">${b.t}</div>
+        <div class="ma">${b.a} 지음</div>
+        <div class="mp">₩${b.p.toLocaleString()}</div>
+      </div>`;
+    const open=()=>openModal(b);
+    el.addEventListener('click',open);
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
+    grid.appendChild(el);
+  });
+}
+render('all');
+document.getElementById('filters').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');render(b.dataset.cat);
+});
+
+/* modal */
+const modal=document.getElementById('modal');
+function openModal(b){
+  document.getElementById('mImg').src=b.img;
+  document.getElementById('mImg').alt=b.t+" 표지";
+  document.getElementById('mCat').textContent=b.cat;
+  document.getElementById('mTitle').textContent=b.t;
+  document.getElementById('mAuth').textContent=b.a+" 지음 · 골든래빗";
+  document.getElementById('mPrice').textContent="₩"+b.p.toLocaleString();
+  document.getElementById('mDesc').textContent=b.d;
+  document.getElementById('mBuy').href=b.link;
+  modal.classList.add('show');
+}
+function closeModal(){modal.classList.remove('show');}
+document.getElementById('mClose').addEventListener('click',closeModal);
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* page nav */
+const pages=['home','about','books'];
+function go(id){
+  pages.forEach(p=>document.getElementById(p).classList.toggle('active',p===id));
+  document.querySelectorAll('.navlinks button').forEach(btn=>btn.classList.toggle('active',btn.dataset.go===id));
+  document.getElementById('navlinks').classList.remove('open');
+  window.scrollTo(0,0);
+}
+document.body.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');if(!g)return;
+  e.preventDefault();go(g.dataset.go);
+});
+document.getElementById('mtoggle').addEventListener('click',()=>
+  document.getElementById('navlinks').classList.toggle('open'));
+
+/* stars */
+const cv=document.getElementById('stars'),cx=cv.getContext('2d');
+function stars(){
+  const w=cv.width=cv.offsetWidth,h=cv.height=cv.offsetHeight;cx.clearRect(0,0,w,h);
+  for(let i=0;i<70;i++){const x=Math.random()*w,y=Math.random()*h,r=Math.random()*1.3+.2;
+    cx.globalAlpha=Math.random()*.6+.2;cx.fillStyle='#fff';cx.beginPath();cx.arc(x,y,r,0,7);cx.fill();}
+}
+stars();window.addEventListener('resize',stars);
+</script>
+</body>
+</html>
